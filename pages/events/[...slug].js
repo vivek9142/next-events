@@ -33,14 +33,53 @@ function FilteredEventsPge(props) {
     }
   }, [data]);
 
-  if (!loadedEvents) {
-    return <p className="center">Loading...</p>;
-  }
+  // const filteredYear = filterData[0];
+  // const filteredMonth = filterData[1];
+  // const numYear = +filteredYear;
+  // const numMonth = +filteredMonth;
 
+  let pageHeadData = (
+    <Head>
+      <title>Filtered Events</title>
+      <meta name='description'
+            content={`A list of Filtered Events`}
+      />
+    </Head>
+  );
+
+  if (!loadedEvents) {
+    return (<Fragment>
+      {pageHeadData}
+      <p className="center">Loading...</p>
+    </Fragment>);
+  }
+  
   const filteredYear = filterData[0];
   const filteredMonth = filterData[1];
   const numYear = +filteredYear;
   const numMonth = +filteredMonth;
+  
+  /*
+  so inspite of copy pasting head content we can make a generic head content and
+  copy it before every return stmt and take into account of every dependents in 
+  the head content and paste it in every return stmt
+
+  since we got n error filteredYear is undefined since router works such
+  that it runs when the page was first rendered and if it doesn't have the path parameter 
+  values, at this point, it then runs again and has access to them thereafter
+  but not at the beginning. 
+
+  so we'll make two head content in same component head.
+  */
+
+  pageHeadData = (
+    <Head>
+      <title>Filtered Events</title>
+      <meta name='description'
+            content={`All events for ${numMonth}/${numYear}`}
+      />
+    </Head>
+  );
 
   if (
     isNaN(numYear) ||
@@ -53,6 +92,7 @@ function FilteredEventsPge(props) {
   ) {
     return (
       <Fragment>
+        {pageHeadData}
         <ErrorAlert>
           <p>Invalid filter,Please adjust your values! </p>
         </ErrorAlert>
@@ -74,6 +114,7 @@ function FilteredEventsPge(props) {
   if (!filteredEvents || filteredEvents.length === 0) {
     return (
       <Fragment>
+        {pageHeadData}
         <ErrorAlert>
           <p>No Events found for the choosen filter!</p>
         </ErrorAlert>
@@ -86,25 +127,10 @@ function FilteredEventsPge(props) {
 
   const date = new Date(numYear, numMonth - 1);
   
-  /*
-  Now you might notice, though, that if you filter for events, if we set a filter here and 
-  we find our events, here, if we reload this page in the page source we don't see the 
-  title and the description.
-
-  In our slug page, here, we do add a head,but we only add it here in the main content,
-  which we return if we make it past all these if checks we have in front of it.
-  Now, if we make it into one of those if checks to show the loading text, or to show 
-  this error, or to show another error, then we didn't add head here.
-  */
   
   return (
     <Fragment>
-      <Head>
-          <title>Filtered Events</title>
-          <meta name='description'
-                content={`All events for ${numMonth}/${numYear}`}
-          />
-      </Head>
+      {pageHeadData}
       <ResultsTitle date={date} />
       <EventList items={filteredEvents} />
     </Fragment>
