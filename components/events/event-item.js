@@ -17,10 +17,10 @@ function EventItem(props){
     const exploreLink = `/events/${id}`;
     return(
         <li className={classes.item}>
-            <img src={'/'+ image } alt='' />
+            <img src={`/${image}`} alt='' />
             <div className={classes.content}> 
                 <div className={classes.summary}>
-                    <h2>Title</h2>
+                    <h2>{title}</h2>
                     <div className={classes.date}>
                         <DateIcon/>
                         <time>{humanReadableDate}</time>

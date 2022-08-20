@@ -4,9 +4,12 @@ import { getAllEvents} from '../../dummy-data';
 import EventList from '../../components/events/event-list';
 import EventsSearch from '../../components/events/events-search.js';
 
-function AllEvents(){
-    const events = getAllEvents();
+
+function AllEvents(props){
+    // const events = getAllEvents();
     const router = useRouter();
+    const {events} = props;
+
     function findEventHandler(year,month){
         const fullPath = `events/${year}/${month}`;
         router.push(fullPath);
@@ -21,3 +24,14 @@ function AllEvents(){
 }
 
 export default AllEvents;
+
+export async function getStaticProps(context){
+    const events = await getAllEvents();
+
+    return {
+        props:{
+            events:events
+        },
+        revalidate: 60
+    }
+}
