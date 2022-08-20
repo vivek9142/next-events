@@ -8,6 +8,8 @@ import ResultsTitle from "../../components/results-title/results-title";
 import Button from "../../components/ui/button";
 import ErrorAlert from "../../components/ui/error-alert";
 
+import Head from 'next/head'
+
 function FilteredEventsPge(props) {
   const [loadedEvents, setLoadedEvents] = useState();
   const router = useRouter();
@@ -83,9 +85,26 @@ function FilteredEventsPge(props) {
   }
 
   const date = new Date(numYear, numMonth - 1);
+  
+  /*
+  Now you might notice, though, that if you filter for events, if we set a filter here and 
+  we find our events, here, if we reload this page in the page source we don't see the 
+  title and the description.
 
+  In our slug page, here, we do add a head,but we only add it here in the main content,
+  which we return if we make it past all these if checks we have in front of it.
+  Now, if we make it into one of those if checks to show the loading text, or to show 
+  this error, or to show another error, then we didn't add head here.
+  */
+  
   return (
     <Fragment>
+      <Head>
+          <title>Filtered Events</title>
+          <meta name='description'
+                content={`All events for ${numMonth}/${numYear}`}
+          />
+      </Head>
       <ResultsTitle date={date} />
       <EventList items={filteredEvents} />
     </Fragment>
