@@ -1,10 +1,21 @@
+import Head from 'next/head';
+
 import {getFeaturedEvents} from '../helpers/api-util';
 import EventList from "../components/events/event-list";
 
 function HomePage(props){
-    console.log(props.events);
+    /*
+    by Head you can inject title,meta tags into head section of 
+    html page
+    */
     return (
         <div>
+            <Head>
+                <title>NextJs Events</title>
+                <meta name='description'
+                    content='Find a lot of great events to evolve...'
+                />
+            </Head>
            <h1>The Home Page</h1> 
            <EventList items={props.events} />
         </div>
