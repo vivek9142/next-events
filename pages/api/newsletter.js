@@ -1,4 +1,4 @@
-import {MongoClient} from 'mongodb';
+import {connectDatabase,insertDocument} from '../../helpers/db-util';
 
 export default async function Handler(req,res){
     if(req.method === 'POST'){
@@ -9,12 +9,25 @@ export default async function Handler(req,res){
             return;
         }
 
-        const client = await MongoClient.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.gnmor.mongodb.net/${rpocess.env.DB}?retryWrites=true&w=majority`);
-        const db = client.db();
+        let client;
 
-        await db.collection('newsletters').insertOne({email: userEmail});
+        try{
+            client = await connectDatabase();
+        }catch(error){
+            res.status(500).json({message: 'Connection to the Database Failed!'});
+            return;
+        }
 
-        client.close();
+        try{
+            await insertDocument(client,'newsletters',{email: userEmail});
+            client.close();
+        }catch(error){
+            res.status(500).json({message: ' Inserting Data Failed!'});
+            return;
+        }
+        
+
+        
 
         console.log(userEmail);
         res.status(201).json({message: 'Signed Up Successfuly!'})
