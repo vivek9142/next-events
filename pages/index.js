@@ -3,11 +3,10 @@ import Head from 'next/head';
 import {getFeaturedEvents} from '../helpers/api-util';
 import EventList from "../components/events/event-list";
 
+import NewsLetterRegistration from '../components/input/newsletter-registration';
+
 function HomePage(props){
-    /*
-    by Head you can inject title,meta tags into head section of 
-    html page
-    */
+    
     return (
         <div>
             <Head>
@@ -17,6 +16,7 @@ function HomePage(props){
                 />
             </Head>
            <h1>The Home Page</h1> 
+           <NewsLetterRegistration />
            <EventList items={props.events} />
         </div>
     )
